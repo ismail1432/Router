@@ -3,15 +3,17 @@
 $routes = [
     'home' =>
         [
-            'url' => '',
-            'controller' => '\App\Controller\HomeController',
-            'action' => 'index',
+            'url' => '', //url to match
+            'controller' => '\App\Controller\HomeController', //Controller to call
+            'action' => 'index', //function in controller to call
         ],
     'recette' =>
         [
-            'url' => 'recette/{id}',
+            'url' => 'recette/{id}/{slug}',
             'controller' => '\App\Controller\RecetteController',
             'action' => 'show',
+            'params' => 'id', //params
+            'params' => 'slug' //params
         ],
     'admin' =>
         [

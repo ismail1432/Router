@@ -16,7 +16,7 @@ class Router
         $callback = $this->routerMatch();
 
         $controllerResolver = new FactoryController();
-        $controllerResolver->resolveController($callback['controller'], $callback['action']);
+        $controllerResolver->resolveController($callback['controller'], $callback['action'], $callback['params']);
     }
 
     public function getRegExep($path)
@@ -33,20 +33,25 @@ class Router
         $url = $_SERVER['QUERY_STRING'];
 
         foreach ($routes as $route) {
-
             $patternAsRegex = $this->getRegExep($route['url']);
             if ($patternAsRegex) {
                 // We've got a regex, let's parse a URL
                 if (preg_match($patternAsRegex, $url, $matches)) {
                     // Get elements with string keys from matches
-                    $params = array_intersect_key($matches, array_flip(array_filter(array_keys($matches), 'is_string'))
+                    $params = array_intersect_key(
+                        $matches,
+                        array_flip(array_filter(array_keys($matches), 'is_string'))
                     );
-                     return ['controller' => $route['controller'], 'action' => $route['action']];
+
+                    return [
+                        'controller' => $route['controller'],
+                        'action' => $route['action'],
+                        'params' => $params,
+                    ];
                 }
             }
         }
 
         throw new \Exception(sprintf("No route match %s", $url));
     }
-
 }
